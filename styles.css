@@ -1,5 +1,14 @@
 /* your beautiful css styling goes here! */
+body > div {
+  width: 1024px;
+  margin: 0 auto 0;
+  border: 1px solid red;
+}
 
-/* Note: an asteroid image is included in this repo. 
+div.gameboard {
+  height: 730px;
+}
+
+/* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
 
