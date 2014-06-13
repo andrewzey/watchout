@@ -19,9 +19,21 @@ var axes = {
 };
 
 //Draw the board
-var svg = d3.selectAll('.gameboard').append('svg')
+var board = d3.selectAll('.gameboard').append('svg')
           .attr('width', gameOptions.width)
           .attr('height', gameOptions.height);
+
+//Update Scores
+var updateCurrScore = function(){
+  d3.select('.current').text(gameStats.currScore.toString());
+};
+
+var updateHighScore = function(){
+  if (gameStats.currScore > gameStats.highScore) {
+    d3.select('.high').text(gameStats.highScore.toString());
+  }
+};
+
 
 
 
