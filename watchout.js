@@ -34,6 +34,7 @@ var createEnemies = function(){
   });
 };
 
+
 var render = function( enemy_data ){
   var enemies = board.selectAll('circle.enemy').data(enemy_data, function(d) { return d.id; });
 
@@ -42,9 +43,12 @@ var render = function( enemy_data ){
 
   //Update position of existing enemies and new enemies
   enemies.attr("class", "enemy")
+    .transition()
+    .duration(1000)
     .attr('cx', function ( enemy ){return axes.x(enemy.x);})
     .attr('cy', function ( enemy ){return axes.y(enemy.y);})
-    .attr('r', 15);
+    .attr('r', 15)
+
 
   //remove unused existing enemy DOM nodes
   enemies.exit().remove();
