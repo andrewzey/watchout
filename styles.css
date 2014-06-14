@@ -12,6 +12,8 @@ div.gameboard {
 
 .player {
   fill: blue;
+  width:100px;
+  height:100px;
 }
 
 .enemy {

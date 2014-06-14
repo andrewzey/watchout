@@ -12,13 +12,6 @@ var gameStats = {
   highScore: 0
 };
 
-//Defines axes of game for adding, removing, and redrawing elements. *Domain is input, range is output
-var axes = {
-  x: d3.scale.linear().domain([0,100]).range([0, gameOptions.width]),
-  y: d3.scale.linear().domain([0,100]).range([0, gameOptions.height])
-};
-
-
 //Draw the board
 var board = d3.select('.gameboard').append('svg:svg')
           .attr('width', gameOptions.width)
@@ -27,28 +20,25 @@ var board = d3.select('.gameboard').append('svg:svg')
 
 var Player = function(){
   this.data = {
-    x: 50,
-    y: 50,
-    r: 10,
+    x: gameOptions.width/2,
+    y: gameOptions.height/2,
+    r: 15
   };
-  var self = this;
-  board.selectAll('circle.player')
+
+  board.selectAll('.player')
     .data( [this.data] )
     .enter()
     .append('circle')
     .attr('class', 'player')
     .attr('r', function(d){ return d.r; })
-    .attr('cx', function (d){return axes.x(d.x);})
-    .attr('cy', function (d){return axes.y(d.y);})
-    .attr('fill', function(d){ return d.color; })
+    .attr('cx', function (d){return d.x;})
+    .attr('cy', function (d){return d.y;})
     .call(this.dragOn());
-  //this.move(gameOptions.width/2, gameOptions.height/2);
 };
 
 Player.prototype.dragOn = function(){
   var self =  this;
   return d3.behavior.drag()
-    .origin(function(d){return d;})
     .on('drag', function(){
       var X = self.data.x + d3.event.dx;
       var Y = self.data.y + d3.event.dy;
@@ -72,8 +62,8 @@ var createEnemies = function(){
   return _.range(0, gameOptions.enemyCount).map(function(i){
     return {
       id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100
+      x: Math.random() * gameOptions.width,
+      y: Math.random() * gameOptions.height
     };
   });
 };
@@ -99,8 +89,8 @@ var render = function( enemy_data ){
   enemies.attr("class", "enemy")
     .transition()
     .duration(1000)
-    .attr('cx', function ( enemy ){return axes.x(enemy.x);})
-    .attr('cy', function ( enemy ){return axes.y(enemy.y);})
+    .attr('cx', function ( enemy ){return enemy.x;})
+    .attr('cy', function ( enemy ){return enemy.y;})
     .attr('r', 15)
 
 
@@ -116,11 +106,10 @@ var play = function(){
   };
 
   gameTurn();
-
+  var player = new Player();
 
   setInterval(gameTurn, 1000);
 };
-  var player = new Player();
 
 play();
 
