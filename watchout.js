@@ -27,8 +27,8 @@ var board = d3.select('.gameboard').append('svg:svg')
 
 var Player = function(){
   this.data = {
-    x: gameOptions.width/2,
-    y: gameOptions.height/2,
+    x: 50,
+    y: 50,
     r: 10,
   };
   var self = this;
