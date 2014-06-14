@@ -1,12 +1,16 @@
 /* your beautiful css styling goes here! */
 body > div {
-  width: 1024px;
+  width: 960px;
   margin: 0 auto 0;
   border: 1px solid red;
 }
 
 div.gameboard {
   height: 730px;
+}
+
+.enemy {
+  fill: red;
 }
 
 /* Note: an asteroid image is included in this repo.
