@@ -24,6 +24,23 @@ var board = d3.select('.gameboard').append('svg:svg')
           .attr('width', gameOptions.width)
           .attr('height', gameOptions.height);
 
+
+var player = function(){
+  this.data = {
+    x: Math.floor(gameOptions.width/2),
+    y: Math.floor(gameOptions.height/2),
+    r: 10,
+    color: "red"
+  };
+  board.selectAll('circle.player')
+  .data( [this.data] )
+  .enter()
+  .append()
+
+};
+
+
+
 var createEnemies = function(){
   return _.range(0, gameOptions.enemyCount).map(function(i){
     return {
@@ -34,6 +51,16 @@ var createEnemies = function(){
   });
 };
 
+
+// var Enemies = function(){
+//   this.data = [];
+//   this.updateData();
+//   this.alreadyCollided = false;
+//   svg.selectAll('circle.enemy')
+//     .data(this.data)
+//     .enter()
+//     .
+// }
 
 var render = function( enemy_data ){
   var enemies = board.selectAll('circle.enemy').data(enemy_data, function(d) { return d.id; });
