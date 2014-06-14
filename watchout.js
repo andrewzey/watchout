@@ -63,35 +63,64 @@ var createEnemies = function(){
     return {
       id: i,
       x: Math.random() * gameOptions.width,
-      y: Math.random() * gameOptions.height
+      y: Math.random() * gameOptions.height,
+      r: 15
     };
   });
 };
 
+var collisionTween = function(endPosition) {
+  var enemy = d3.select(this);
+  var start = {
+    x: parseFloat(enemy.attr('cx')),
+    y: parseFloat(enemy.attr('cy'))
+  };
+  var end = {
+    x: endPosition.x,
+    y: endPosition.y
+  };
 
-// var Enemies = function(){
-//   this.data = [];
-//   this.updateData();
-//   this.alreadyCollided = false;
-//   svg.selectAll('circle.enemy')
-//     .data(this.data)
-//     .enter()
-//     .
-// }
+  //this inner function will get called over and over for the duration of the transition
+  return function(time){
+    var nextPosition = {
+      x: start.x + (end.x - start.x) * time,
+      y: start.y + (end.y - start.y) * time
+    };
+
+    //if the enemy's position overlaps with the player, call collision function
+    //updateScore();
+    var player = board.select('.player');
+
+    enemy
+      .attr('cx', nextPosition.x)
+      .attr('cy', nextPosition.y);
+
+    if (Math.abs(player.attr('cx') - nextPosition.x) < 2 * player.attr('r') && Math.abs(player.attr('cx') - nextPosition.y) < 2 * player.attr('r')) {
+      console.log('collision');
+      updateScores();
+    }
+  };
+};
+
+var updateScores = function(){
+  //set high scores and current scores according to some rules
+
+};
 
 var render = function( enemy_data ){
   var enemies = board.selectAll('circle.enemy').data(enemy_data, function(d) { return d.id; });
 
   //enter new enemies
-  enemies.enter().append('svg:circle')
+  enemies.enter().append('svg:circle');
 
   //Update position of existing enemies and new enemies
   enemies.attr("class", "enemy")
+    .attr('r', function(d) { return d.r;})
+    .attr('cx', function(d) { return d.x;})
+    .attr('cy', function(d) { return d.y;})
     .transition()
     .duration(1000)
-    .attr('cx', function ( enemy ){return enemy.x;})
-    .attr('cy', function ( enemy ){return enemy.y;})
-    .attr('r', 15)
+    .tween('collision', collisionTween);
 
 
   //remove unused existing enemy DOM nodes
@@ -107,6 +136,7 @@ var play = function(){
 
   gameTurn();
   var player = new Player();
+
 
   setInterval(gameTurn, 1000);
 };
