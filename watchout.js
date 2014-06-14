@@ -25,19 +25,26 @@ var board = d3.select('.gameboard').append('svg:svg')
           .attr('height', gameOptions.height);
 
 
-var player = function(){
+var Player = function(){
   this.data = {
-    x: Math.floor(gameOptions.width/2),
-    y: Math.floor(gameOptions.height/2),
+    x: 50,
+    y: 50,
     r: 10,
-    color: "red"
   };
+  var self = this;
   board.selectAll('circle.player')
-  .data( [this.data] )
-  .enter()
-  .append()
-
+    .data( [this.data] )
+    .enter()
+    .append('circle')
+    //.call(this.dragOn())
+    .attr('class', 'player')
+    .attr('r', function(d){ return d.r; })
+    .attr('cx', function (d){return axes.x(d.x);})
+    .attr('cy', function (d){return axes.y(d.y);})
+    .attr('fill', function(d){ return d.color; });
+  //this.move(gameOptions.width/2, gameOptions.height/2);
 };
+
 
 
 
@@ -89,6 +96,8 @@ var play = function(){
   };
 
   gameTurn();
+
+  var player = new Player();
 
   setInterval(gameTurn, 1000);
 };

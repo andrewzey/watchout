@@ -9,6 +9,11 @@ div.gameboard {
   height: 730px;
 }
 
+
+.player {
+  fill: blue;
+}
+
 .enemy {
   fill: red;
   transition: all 1s ease 0s;
