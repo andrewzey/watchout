@@ -35,21 +35,34 @@ var createEnemies = function(){
 };
 
 var render = function( enemy_data ){
-  var enemies = board.selectAll('svg').data(enemy_data, function(d) { return d.id; });
-  console.log(enemies);
-  enemies.enter()
-    .append('svg:circle')
-    .attr("class", "enemy")
-    .attr('cx', function ( enemy ){
-      return axes.x(enemy.x);
-    })
-    .attr('cy', function ( enemy ){
-      return axes.y(enemy.y);
-    })
+  var enemies = board.selectAll('circle.enemy').data(enemy_data, function(d) { return d.id; });
+
+  //enter new enemies
+  enemies.enter().append('svg:circle')
+
+  //Update position of existing enemies and new enemies
+  enemies.attr("class", "enemy")
+    .attr('cx', function ( enemy ){return axes.x(enemy.x);})
+    .attr('cy', function ( enemy ){return axes.y(enemy.y);})
     .attr('r', 15);
-    enemies.exit().remove();
+
+  //remove unused existing enemy DOM nodes
+  enemies.exit().remove();
 };
 
+var play = function(){
+
+  var gameTurn = function() {
+    var newEnemyPositions = createEnemies();
+    render(newEnemyPositions);
+  };
+
+  gameTurn();
+
+  setInterval(gameTurn, 1000);
+};
+
+play();
 
 
 
@@ -63,16 +76,6 @@ var updateHighScore = function(){
     d3.select('.high').text(gameStats.highScore.toString());
   }
 };
-
-var play = function(){
-  var newEnemyPositions = createEnemies();
-  return render(newEnemyPositions);
-
-};
-play();
-
-
-
 
 
 
