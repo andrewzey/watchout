@@ -27,8 +27,8 @@ var board = d3.select('.gameboard').append('svg:svg')
 
 var Player = function(){
   this.data = {
-    x: 50,
-    y: 50,
+    x: gameOptions.width/2,
+    y: gameOptions.height/2,
     r: 10,
   };
   var self = this;
@@ -36,15 +36,35 @@ var Player = function(){
     .data( [this.data] )
     .enter()
     .append('circle')
-    //.call(this.dragOn())
     .attr('class', 'player')
     .attr('r', function(d){ return d.r; })
     .attr('cx', function (d){return axes.x(d.x);})
     .attr('cy', function (d){return axes.y(d.y);})
-    .attr('fill', function(d){ return d.color; });
+    .attr('fill', function(d){ return d.color; })
+    .call(this.dragOn());
   //this.move(gameOptions.width/2, gameOptions.height/2);
 };
 
+Player.prototype.dragOn = function(){
+  var self =  this;
+  return d3.behavior.drag()
+    .origin(function(d){return d;})
+    .on('drag', function(){
+      var X = self.data.x + d3.event.dx;
+      var Y = self.data.y + d3.event.dy;
+      if(0 < X && X < gameOptions.width && 0 < Y && Y < gameOptions.height){
+        self.move(X, Y);
+      }
+    });
+};
+Player.prototype.move = function(x, y){
+  this.data.x = x;
+  this.data.y = y;
+  board.selectAll('circle.player')
+    .data( [this.data] )
+    .attr('cx', function(d){ return d.x})
+    .attr('cy', function(d){ return d.y});
+};
 
 
 
@@ -97,10 +117,10 @@ var play = function(){
 
   gameTurn();
 
-  var player = new Player();
 
   setInterval(gameTurn, 1000);
 };
+  var player = new Player();
 
 play();
 
